@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 public abstract class HumanActor {
 	private int id;
+	int num;
 	private String name;
 	private int age;
 	private GregorianCalendar dateofbirth;
