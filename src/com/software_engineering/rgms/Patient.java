@@ -1,22 +1,29 @@
 package com.software_engineering.rgms;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+
 
 public class Patient extends HumanActor{
-	GregorianCalendar registerdate;
-	float billdue;
-	public Patient(){
-		
+	
+	int notifmethod;
+	protected HashMap <Integer, Appointment> apps;
+	
+	public Patient(String username, String name, String emailid,
+			GregorianCalendar dob, String address, String phoneno,
+			GregorianCalendar registerdate, int notifmethod){
+		super(username, name, emailid, dob, address, phoneno, registerdate);
+		this.notifmethod = notifmethod;
 	}
-	public GregorianCalendar getDate(){
-		return registerdate;
+	public int getNotifMethod(){
+		return notifmethod;
 	}
-	public void setDate(GregorianCalendar date){
-		this.registerdate = date;
+	public void setNotifMethod(int notifmethod){
+		this.notifmethod = notifmethod;
 	}
-	public float getBillDue(){
-		return billdue;
+	public HashMap<Integer,Appointment> getAppointments(){
+		return apps;
 	}
-	public void setBillDue(int amt){
-		this.billdue = amt;
+	public void addAppointment(int id, Appointment a){
+		apps.put(id, a);
 	}
 }
