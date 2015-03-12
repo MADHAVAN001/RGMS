@@ -1,21 +1,22 @@
 package com.software_engineering.rgms;
 import java.util.GregorianCalendar;
 public class Appointment {
-	int appointmentid;
-	boolean followup;
-	GregorianCalendar datetime;
-	String medicalpractice;
-	String healthproblem;
-	Patient patient;
 	
-	public Appointment(int appointmentid, boolean followup, GregorianCalendar datetime,
-			String medicalpractice, String healthproblem, Patient patient) {
+	int appointmentid;
+	int type;
+	GregorianCalendar datetime;
+	String healthprob;
+	String place;
+	String doctorname;
+	
+	public Appointment(int appointmentid, int type, GregorianCalendar datetime,
+			String healthproblem, String place, String doctorname){
 		this.appointmentid = appointmentid;
-		this.followup = followup;
+		this.type = type;
 		this.datetime = datetime;
-		this.medicalpractice = medicalpractice;
-		this.healthproblem = healthproblem;
-		this.patient = patient;
+		this.healthprob = healthproblem;
+		this.place = place;
+		this.doctorname = doctorname;
 	}
 	public int getAppointmentid() {
 		return appointmentid;
@@ -23,34 +24,34 @@ public class Appointment {
 	public void setAppointmentid(int appointmentid) {
 		this.appointmentid = appointmentid;
 	}
-	public boolean isFollowup() {
-		return followup;
+	public int getType(){
+		return type;
 	}
-	public void setFollowup(boolean followup) {
-		this.followup = followup;
+	public void setType(int type){
+		this.type = type;
 	}
-	public String toStringDateTime() {
+	public String getDateTime() {
 		return datetime.toString();
 	}
 	public void setDatetime(GregorianCalendar date) {
 		this.datetime = date;
 	}
-	public String getMedicalpractice() {
-		return medicalpractice;
+	public String getHealthProblem() {
+		return healthprob;
 	}
-	public void setMedicalpractice(String medicalpractice) {
-		this.medicalpractice = medicalpractice;
+	public void setHealthProblem(String healthproblem) {
+		this.healthprob = healthproblem;
 	}
-	public String getHealthproblem() {
-		return healthproblem;
+	public String getPlace(){
+		return place;
 	}
-	public void setHealthproblem(String healthproblem) {
-		this.healthproblem = healthproblem;
+	public void setPlace(String place){
+		this.place = place;
 	}
-	public Patient getPatient() {
-		return patient;
+	public String getDoctorUsername(){
+		return doctorname;
 	}
-	public void setPatient(Patient patient) {
-		this.patient = patient;
+	public void setDoctorUsername(String doctorname){
+		this.doctorname = doctorname;
 	}
 }
