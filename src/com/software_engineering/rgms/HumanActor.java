@@ -1,23 +1,32 @@
 package com.software_engineering.rgms;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
-public abstract class HumanActor {
-	private int id;
-	int num;
+
+public class HumanActor {
+	
+	private String username;
 	private String name;
-	private int age;
-	private GregorianCalendar dateofbirth;
+	private String emailid;
+	private GregorianCalendar dob;
 	private String address;
-	private HashMap<Integer,Appointment> appointment ;
-	public HumanActor(){
-		
+	private String phoneno;
+	private GregorianCalendar registerdate;
+
+	public HumanActor(String username, String name, String emailid,
+			GregorianCalendar dob, String address, String phoneno,
+			GregorianCalendar registerdate){
+		this.username = username;
+		this.name = name;
+		this.emailid = emailid;
+		this.dob = dob;
+		this.address = address;
+		this.phoneno = phoneno;
+		this.registerdate = registerdate;
 	}
-	public int getId(){
-		return id;
+	public String getUsername(){
+		return username;
 	}
-	public void setId(int id){
-		this.id=id;
+	public void setUsername(String username){
+		this.username = username;
 	}
 	public String getName(){
 		return name;
@@ -25,17 +34,17 @@ public abstract class HumanActor {
 	public void setName(String name){
 		this.name=name;
 	}
-	public int getAge(){
-		return age;
+	public String getEmailId(){
+		return emailid;
 	}
-	public void setAge(int age){
-		this.age=age;
+	public void setEmailId(String emailid){
+		this.emailid = emailid;
 	}
 	public GregorianCalendar getDOB(){
-		return dateofbirth;
+		return dob;
 	}
 	public void setDOB(GregorianCalendar DOB){
-		this.dateofbirth=DOB;
+		this.dob=DOB;
 	}
 	public String getAddress(){
 		return address;
@@ -43,26 +52,17 @@ public abstract class HumanActor {
 	public void setAddress(String address){
 		this.address=address;
 	}
-	public Appointment getAppointment(int id){
-		return appointment.get(id);
+	public String getPhoneNo(){
+		return phoneno;
 	}
-	public void addAppointment(Appointment a){
-		appointment.put(a.getAppointmentid(),a);
+	public void setPhoneNo(String no){
+		this.phoneno = no;
 	}
-	/*
-	 * Patient only allowed to change date time or health condition
-	 */
-	public boolean changeAppointment(Appointment a, GregorianCalendar date, String healthprob){
-		if(appointment.get(a.getAppointmentid()) == null)
-			return false;
-		a.setDatetime(date);
-	    a.setHealthproblem(healthprob);
-	    return true;
+	public GregorianCalendar getRegDate(){
+		return registerdate;
 	}
-	/*
-	 * Assumption : Appointment IDs for blank appointments are set to 0
-	 */
-	public void deleteAppointment(Appointment a){
-		appointment.remove(a.getAppointmentid());
+	public void setRegDate(GregorianCalendar registerdate){
+		this.registerdate = registerdate;
 	}
 }
+	
