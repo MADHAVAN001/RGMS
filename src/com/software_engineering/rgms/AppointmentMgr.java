@@ -6,15 +6,21 @@ import java.util.HashMap;
 public class AppointmentMgr {
 	
 	PatientMgr pm = new PatientMgr();
-	HashMap <Integer, String>patientidmapper;
-	HashMap <Integer, String>doctoridmapper;
+	HashMap <Integer, String>patientidmapper = new HashMap <Integer, String>();
+	HashMap <Integer, String>doctoridmapper = new HashMap <Integer, String>();
+	
+	public AppointmentMgr(){
+		DatabaseMgr db = new DatabaseMgr();
+		patientidmapper = db.getData(3, patientidmapper);
+		doctoridmapper = db.getData(4, doctoridmapper);
+	}
 	
 	public void createAppointment(String patientname, int appointmentid,
 			int type, GregorianCalendar datetime,
 			String healthproblem, String place, String doctorname){
 		(pm.patients.get(patientname)).addAppointment(appointmentid, 
-				new Appointment(appointmentid, type, datetime,
-				healthproblem, place, doctorname));
+					new Appointment(appointmentid, type, datetime,
+					healthproblem, place, doctorname));			
 		patientidmapper.put(appointmentid, patientname);
 		doctoridmapper.put(appointmentid, doctorname);
 	}
