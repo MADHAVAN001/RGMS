@@ -49,6 +49,7 @@ public class DatabaseMgr {
 				dob, address, phoneno, registerdate, notifmethod));
 			    }
 			    return h;
+			    break;
 			case 2: 
 				sql = "SELECT USERNAME, NAME, EMAILID, DOB, ADDRESS," + 
 			"PHONE,REGISTERDATE, SPECIALIZATION, PRACTICELOCATION, HOLIDAYSLEFT "
@@ -70,24 +71,8 @@ public class DatabaseMgr {
 				practicelocation, holidaysleft));
 			    }
 			    return h;
-			/*case 3:
-				sql = "SELECT APPOINTMENTID, TYPE, DATETIME, "
-						+ "HEALTHPROBLEM, PLACE, DOCTORNAME FROM APPOINTMENT "
-						+ "WHERE PATIENTNAME = ";
-				rs = stmt.executeQuery(sql);
-				while(rs.next()){
-					int appointmentid = rs.getInt("APPOINTMENTID");
-					int type = rs.getInt("TYPE");
-					GregorianCalendar datetime = rs.getString("DATETIME");
-					String healthproblem = rs.getString("HEALTHPROBLEM");
-					String place = rs.getString("PLACE");
-					String doctorname = rs.getString("DOCTORNAME");
-					h.put(appointmentid, new Appointment(appointmentid, type, datetime,
-							healthproblem, place, doctorname));
-				}
-				return h;
-				*/
-			case 4:
+			    break;
+			case 3:
 				sql = "SELECT APPOINTMENTID, PATIENTNAME FROM APPOINTMENT";
 				rs = stmt.executeQuery(sql);
 				while(rs.next()){
@@ -96,7 +81,8 @@ public class DatabaseMgr {
 					h.put(appointmentid, patientname);
 				}
 				return h;
-			case 5:
+				break;
+			case 4:
 				sql = "SELECT APPOINTMENTID, DOCTORNAME FROM APPOINTMENT";
 				rs = stmt.executeQuery(sql);
 				while(rs.next()){
@@ -105,10 +91,29 @@ public class DatabaseMgr {
 					h.put(appointmentid, doctorname);
 				}
 				return h;
+				break;
 			}
 		}catch(SQLException se){
 			se.printStackTrace();
 		}
+	}
+	
+	public HashMap<Integer, Appointment> loadAppointments(String patientname, HashMap<Integer, Appointment>h){
+		sql = "SELECT APPOINTMENTID, TYPE, DATETIME, "
+				+ "HEALTHPROBLEM, PLACE, DOCTORNAME FROM APPOINTMENT "
+				+ "WHERE PATIENTNAME = \'"+patientname+"\'";
+		rs = stmt.executeQuery(sql);
+		while(rs.next()){
+			int appointmentid = rs.getInt("APPOINTMENTID");
+			int type = rs.getInt("TYPE");
+			GregorianCalendar datetime = rs.getString("DATETIME");
+			String healthproblem = rs.getString("HEALTHPROBLEM");
+			String place = rs.getString("PLACE");
+			String doctorname = rs.getString("DOCTORNAME");
+			h.put(appointmentid, new Appointment(appointmentid, type, datetime,
+					healthproblem, place, doctorname));
+	}
+		return h;
 	}
 
 }
