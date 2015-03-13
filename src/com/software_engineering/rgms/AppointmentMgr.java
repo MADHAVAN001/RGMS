@@ -8,9 +8,9 @@ public class AppointmentMgr {
 	PatientMgr pm = new PatientMgr();
 	HashMap <Integer, String>patientidmapper = new HashMap <Integer, String>();
 	HashMap <Integer, String>doctoridmapper = new HashMap <Integer, String>();
-	
+	DatabaseMgr db = new DatabaseMgr();
 	public AppointmentMgr(){
-		DatabaseMgr db = new DatabaseMgr();
+		
 		patientidmapper = db.getData(3, patientidmapper);
 		doctoridmapper = db.getData(4, doctoridmapper);
 	}
@@ -23,6 +23,9 @@ public class AppointmentMgr {
 					healthproblem, place, doctorname));			
 		patientidmapper.put(appointmentid, patientname);
 		doctoridmapper.put(appointmentid, doctorname);
+		db.insertData(3, new Appointment(appointmentid, type, datetime,
+					healthproblem, place, doctorname));
+		db.insertData(appointmentid, patientname);
 	}
 	
 	public void rescheduleAppointment(String patientname, int appointmentid, GregorianCalendar datetime){
@@ -35,6 +38,7 @@ public class AppointmentMgr {
 		pm.patients.get(patientname).apps.remove(appointmentid);
 		patientidmapper.remove(appointmentid);
 		doctoridmapper.remove(appointmentid);
+		db.deleteRecord(3, appointmentid);
 	}
 	
 	public HashMap<Integer, Appointment> getAppointments(String patientname){
