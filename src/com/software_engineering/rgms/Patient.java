@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class Patient extends HumanActor{
 	
 	int notifmethod;
-	protected HashMap <Integer, Appointment> apps;
+	protected HashMap <Integer, Appointment> apps = new HashMap<Integer,Appointment>();
 	
 	public Patient(String username, String name, String emailid,
 			GregorianCalendar dob, String address, String phoneno,
