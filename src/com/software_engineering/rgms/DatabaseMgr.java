@@ -34,7 +34,8 @@ public class DatabaseMgr {
 		try{
 			switch(choice){
 			case 1:
-				sql = "SELECT USERNAME, NAME, EMAILID, DOB, ADDRESS, PHONE,REGISTERDATE, NOTIFMETHOD FROM PATIENT";
+				sql = "SELECT USERNAME, NAME, EMAILID, DOB, ADDRESS,"
+						+ " PHONE,REGISTERDATE, NOTIFMETHOD FROM PATIENT";
 			    rs = stmt.executeQuery(sql);
 			    while(rs.next()){
 			    	String username = rs.getString("USERNAME");
@@ -73,21 +74,21 @@ public class DatabaseMgr {
 			    return h;
 			    break;
 			case 3:
-				sql = "SELECT APPOINTMENTID, PATIENTNAME FROM APPOINTMENT";
+				sql = "SELECT APPOINTMENTID, USERNAME FROM APPOINTMENT";
 				rs = stmt.executeQuery(sql);
 				while(rs.next()){
 					int appointmentid = rs.getInt("APPOINTMENTID");
-					String patientname = rs.getString("PATIENTNAME");
+					String patientname = rs.getString("USERNAME");
 					h.put(appointmentid, patientname);
 				}
 				return h;
 				break;
 			case 4:
-				sql = "SELECT APPOINTMENTID, DOCTORNAME FROM APPOINTMENT";
+				sql = "SELECT APPOINTMENTID, USERNAME FROM APPOINTMENT";
 				rs = stmt.executeQuery(sql);
 				while(rs.next()){
 					int appointmentid = rs.getInt("APPOINTMENTID");
-					String doctorname = rs.getString("DOCTORNAME");
+					String doctorname = rs.getString("USERNAME");
 					h.put(appointmentid, doctorname);
 				}
 				return h;
@@ -98,10 +99,11 @@ public class DatabaseMgr {
 		}
 	}
 	
-	public HashMap<Integer, Appointment> loadAppointments(String patientname, HashMap<Integer, Appointment>h){
+	public HashMap<Integer, Appointment> loadAppointments(String patientname,
+			HashMap<Integer, Appointment>h){
 		sql = "SELECT APPOINTMENTID, TYPE, DATETIME, "
-				+ "HEALTHPROBLEM, PLACE, DOCTORNAME FROM APPOINTMENT "
-				+ "WHERE PATIENTNAME = \'"+patientname+"\'";
+				+ "HEALTHPROBLEM, PLACE, USERNAME FROM APPOINTMENT "
+				+ "WHERE USERNAME = \'"+patientname+"\'";
 		rs = stmt.executeQuery(sql);
 		while(rs.next()){
 			int appointmentid = rs.getInt("APPOINTMENTID");
@@ -109,11 +111,91 @@ public class DatabaseMgr {
 			GregorianCalendar datetime = rs.getString("DATETIME");
 			String healthproblem = rs.getString("HEALTHPROBLEM");
 			String place = rs.getString("PLACE");
-			String doctorname = rs.getString("DOCTORNAME");
+			String doctorname = rs.getString("USERNAME");
 			h.put(appointmentid, new Appointment(appointmentid, type, datetime,
 					healthproblem, place, doctorname));
 	}
 		return h;
+	}
+	
+	public void insertData(int choice, Object o){
+		try{
+			switch(choice){
+			case 1:
+				Patient p = (Patient)o;
+				sql = "INSERT INTO PATIENT"
+						+ "VALUES(\'"+ p.getUsername()+ "\',\'" + p.getName()
+						+"\',\'" + p.getEmailId() + "\',\'" + p.getDOB().toString()
+						+"\',\'" + p.getAddress() + "\',\'" + p.getPhoneNo()
+						+"\',\'" + p.getRegDate().toString() + "\',\'" + 
+						p.getNotifMethod() + "\')";
+				stmt.executeUpdate(sql);
+				break;
+			case 2:
+				Doctor d = (Doctor)o;
+				sql = "INSERT INTO DOCTOR"
+						+ "VALUES(\'"+ d.getUsername()+ "\',\'" + d.getName()
+						+"\',\'" + d.getEmailId() + "\',\'" + d.getDOB().toString()
+						+"\',\'" + d.getAddress() + "\',\'" + d.getPhoneNo()
+						+"\',\'" + d.getRegDate().toString() + "\',\'" +
+						d.getSpecialization() + "\',\'" + d.getPracticeLocation()
+						+ "\',\'" + d.getHolidaysLeft() + "\')";
+				stmt.executeUpdate(sql);
+				break;
+			case 3:
+				Appointment a = (Appointment)o;
+				sql = "INSERT INTO APPOINTMENT(APPOINTMENTID, TYPE, "
+						+ "DATETIME, HEALTHPROBLEM, PLACE, USERNAME)"
+						+ "VALUES(\'" + a.getAppointmentid() + "\',\'" +
+						a.getType() + "\',\'" + a.getDateTime() + "\',\'" +
+						a.getHealthProblem() + "\',\'" + a.getPlace() + 
+						"\',\'" + a.getDoctorUsername() + "\')";
+				stmt.executeUpdate(sql);
+				break;
+			}
+		}catch(SQLException se){
+			se.printStackTrace();
+		}
+	}
+	public void insertData(int appointmentid, String patientname){
+		try{
+			sql = "INSERT INTO APPOINTMENT(USERNAME)"
+					+ "VALUES(\'" + patientname + "\')";
+			stmt.executeUpdate(sql);
+		}catch(SQLException se){
+			se.printStackTrace();
+		}
+	}
+	
+	public void deleteRecord(int choice, String name){
+		try{
+			switch(choice){
+			case 1:
+				sql = "DELETE FROM PATIENT WHERE USERNAME = \'"
+						+ name + "\'";
+				stmt.executeUpdate(sql);
+				break;
+			case 2:
+				sql = "DELETE FROM DOCTOR WHERE USERNAME = \'"
+						+ name + "\'";
+				stmt.executeUpdate(sql);
+				break;
+			}
+		}catch(SQLException se){
+			se.printStackTrace();
+		}
+	}
+	
+	public void deleteRecord(int choice, int appointmentid){
+		try{
+			if(choice == 3){
+				sql = "DELETE FROM APPOINTMENT WHERE APPOINTMENTID = \'"
+						+ appointmentid + "\'";
+				stmt.executeUpdate(sql);
+			}
+		}catch(SQLException se){
+			se.printStackTrace();
+		}
 	}
 
 }
