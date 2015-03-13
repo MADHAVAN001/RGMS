@@ -5,9 +5,10 @@ import java.util.*;
 public class PatientMgr {
 	
 	protected HashMap <String, Patient>patients;
+	DatabaseMgr db = new DatabaseMgr();
 	
 	public PatientMgr(){
-		DatabaseMgr db = new DatabaseMgr();
+		
 		patients = new HashMap<String, Patient>();
 		patients = db.getData(1, patients);
 		Iterator<String> keySetIterator = patients.keySet().iterator();
@@ -22,9 +23,12 @@ public class PatientMgr {
 			GregorianCalendar registerdate, int notifmethod){
 		patients.put(username, new Patient(username, name, emailid,
 				dob, address, phoneno, registerdate, notifmethod));
+		db.insertData(1, new Patient(username, name, emailid,
+				dob, address, phoneno, registerdate, notifmethod));
 	}
 	
 	public void deletePatientAccount(String username){
 		patients.remove(username);
+		db.deleteRecord(1, username);
 	}
 }
