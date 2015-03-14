@@ -171,6 +171,17 @@ public class DatabaseMgr {
 			se.printStackTrace();
 		}
 	}
+	
+	public void updateAppointment(int appointmentid, String datetime){
+		try{
+			sql = "UPDATE APPOINTMENT"
+					+ "SET DATETIME = \'" + datetime + "\'"
+					+ " WHERE APPOINTMENT ID = " + appointmentid;
+			stmt.executeUpdate(sql);
+		}catch(SQLException se){
+			se.printStackTrace();
+		}
+	}
 
 	public void deleteRecord(int choice, String name) {
 		try {
