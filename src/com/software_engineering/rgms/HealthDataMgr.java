@@ -2,10 +2,22 @@ package com.software_engineering.rgms;
 
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class HealthDataMgr {
-	HashMap<Integer,HealthAnalysis> HealthAnalysisDetails;
+	protected HashMap<Integer,HealthAnalysis> HealthAnalysisDetails;
 	HashMap<Integer,String> idMapper;
+	DatabaseMgr db = new DatabaseMgr();
+	public HealthDataMgr(){
+		HealthAnalysisDetails = new HashMap<Integer, HealthAnalysis>();
+		HealthAnalysisDetails = db.getData(5, HealthAnalysisDetails);
+		Iterator<Integer> keySetIterator = HealthAnalysisDetails.keySet().iterator();
+		while(keySetIterator.hasNext()){
+			  int key = keySetIterator.next();
+			  HealthAnalysisDetails.get(key).suggestedSurgery = (Surgery)db.getData(key, 1);
+			  HealthAnalysisDetails.get(key).suggestedReferral = (Referral)db.getData(key, 2);
+			}
+	}
 	public void updateHealthAnalysis(int healthAnalysisid, String patientid, String diagnosis, GregorianCalendar datetime, float bill, String suggestion, boolean billpaid,String title, String prescribefollowup)
 	{
 		HealthAnalysis temp = HealthAnalysisDetails.get(healthAnalysisid);
