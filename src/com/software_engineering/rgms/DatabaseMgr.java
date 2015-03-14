@@ -93,6 +93,26 @@ public class DatabaseMgr {
 				}
 				return h;
 				break;
+			case 5:
+				sql = "SELECT HEALTHANALYSISID, DIAGNOSIS, DATETIME, BILL, "
+						+ "SUGGESTION, BILLPAID, TITLE, FOLLOWUP FROM "
+						+ "HEALTHANALYSIS";
+				rs = stmt.executeQuery(sql);
+				while(rs.next()){
+					int healthanalysisid = rs.getInt("HEALTHANALYSISID");
+					String diagnosis = rs.getString("DIAGNOSIS");
+					GregorianCalendar datetime = rs.getString("DATETIME");
+					float bill = rs.getFloat("BILL");
+					String suggestion = rs.getString("SUGGESTION");
+					boolean billpaid = rs.getBoolean("BILLPAID");
+					String title = rs.getString("TITLE");
+					String prescribefollowup = rs.getString("FOLLOWUP");
+					h.put(healthanalysisid, new HealthAnalysis(healthanalysisid
+							,diagnosis,datetime,bill,suggestion,billpaid,
+							title,prescribefollowup));
+				}
+				return h;
+				break;
 			}
 		}catch(SQLException se){
 			se.printStackTrace();
@@ -116,6 +136,31 @@ public class DatabaseMgr {
 					healthproblem, place, doctorname));
 	}
 		return h;
+	}
+	
+	public Object getData(int healthanalysisid, int choice){
+		try{
+			switch(choice){
+			case 1:
+				sql = "SELECT NAME, COMMENTS FROM SURGERY WHERE HEALTHANALYSISID ="
+						+ healthanalysisid;
+				rs = stmt.executeQuery(sql);
+				return new Surgery(rs.getString("NAME"),rs.getString("COMMENTS"));
+			case 2:
+				sql = "SELECT REFERRALID, PATIENTID, DOCTORID1, DOCTORID2, COMMENTS"
+				+ " FROM REFERRAL WHERE HEALTHANALYSISID ="
+				+ healthanalysisid;
+				rs = stmt.executeQuery(sql);
+				return new Referral(rs.getInt("REFERRALID"), rs.getString("PATIENTID"),
+						rs.getString("DOCTORID1"), rs.getString("DOCTORID2"),
+						rs.getString("COMMENTS"));  
+			default:
+				return null;
+			}
+		}catch(SQLException se){
+			se.printStackTrace();
+			return null;
+		}
 	}
 	
 	public void insertData(int choice, Object o){
