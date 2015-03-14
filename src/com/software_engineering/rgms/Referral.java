@@ -6,6 +6,15 @@ public class Referral {
 	String doctorid1;
 	String doctorid2;
 	String comments;
+	
+	public Referral(int referralid, String patientid, String doctorid1,
+			String doctorid2, String comments){
+		this.referralid = referralid;
+		this.patientid = patientid;
+		this.doctorid1 = doctorid1;
+		this.doctorid2 = doctorid2;
+		this.comments = comments;
+	}
 
 	public void setreferralid(int referralid) {
 		this.referralid = referralid;
