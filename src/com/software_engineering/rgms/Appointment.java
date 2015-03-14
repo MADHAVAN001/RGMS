@@ -1,19 +1,20 @@
 package com.software_engineering.rgms;
-import java.util.GregorianCalendar;
 public class Appointment {
 	
 	int appointmentid;
 	int type;
-	GregorianCalendar datetime;
+	int day;
+	int timeslot;
 	String healthprob;
 	String place;
 	String doctorname;
 	
-	public Appointment(int appointmentid, int type, GregorianCalendar datetime,
+	public Appointment(int appointmentid, int type, int day, int timeslot,
 			String healthproblem, String place, String doctorname){
 		this.appointmentid = appointmentid;
 		this.type = type;
-		this.datetime = datetime;
+		this.day = day;
+		this.timeslot = timeslot;
 		this.healthprob = healthproblem;
 		this.place = place;
 		this.doctorname = doctorname;
@@ -30,11 +31,17 @@ public class Appointment {
 	public void setType(int type){
 		this.type = type;
 	}
-	public String getDateTime() {
-		return datetime.toString();
+	public int getDay(){
+		return this.day;
 	}
-	public void setDatetime(GregorianCalendar date) {
-		this.datetime = date;
+	public void setDay(int day){
+		this.day = day;
+	}
+	public int getTimeSlot(){
+		return timeslot;
+	}
+	public void setTimeSlot(int timeslot){
+		this.timeslot = timeslot;
 	}
 	public String getHealthProblem() {
 		return healthprob;
