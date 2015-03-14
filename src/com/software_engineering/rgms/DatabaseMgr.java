@@ -164,8 +164,9 @@ public class DatabaseMgr {
 
 	public void insertData(int appointmentid, String patientname) {
 		try {
-			sql = "INSERT INTO APPOINTMENT(USERNAME)" + "VALUES(\'"
-					+ patientname + "\')";
+			sql = "UPDATE APPOINTMENT"
+					+ "SET PATIENTNAME = \'" + patientname + "\'"
+					+ " WHERE APPOINTMENT ID = " + appointmentid;
 			stmt.executeUpdate(sql);
 		} catch (SQLException se) {
 			se.printStackTrace();
