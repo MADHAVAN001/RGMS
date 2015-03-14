@@ -1,6 +1,5 @@
 package com.software_engineering.rgms;
 
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class AppointmentMgr {
@@ -15,24 +14,27 @@ public class AppointmentMgr {
 		doctoridmapper = db.getData(4, doctoridmapper);
 	}
 	
-	public void createAppointment(String patientname, int appointmentid,
-			int type, GregorianCalendar datetime,
-			String healthproblem, String place, String doctorname){
+	public void createAppointment(String patientname, int type, 
+			int day, int timeslot, String healthproblem, String place, 
+			String doctorname){
+		int appointmentid = patientidmapper.size() + 1;
 		(pm.patients.get(patientname)).addAppointment(appointmentid, 
-					new Appointment(appointmentid, type, datetime,
+					new Appointment(appointmentid, type, day, timeslot,
 					healthproblem, place, doctorname));			
 		patientidmapper.put(appointmentid, patientname);
 		doctoridmapper.put(appointmentid, doctorname);
-		db.insertData(3, new Appointment(appointmentid, type, datetime,
-					healthproblem, place, doctorname));
+		db.insertData(3, new Appointment(appointmentid, type, day, timeslot, 
+				healthproblem, place, doctorname));
 		db.insertData(appointmentid, patientname);
 	}
 	
-	public void rescheduleAppointment(String patientname, int appointmentid, GregorianCalendar datetime){
+	public void rescheduleAppointment(String patientname, int appointmentid, int day,
+			int timeslot){
 		Appointment newApp = (pm.patients.get(patientname)).apps.get(appointmentid);
-		newApp.setDatetime(datetime);
+		newApp.setDay(day);
+		newApp.setTimeSlot(timeslot);
 		(pm.patients.get(patientname)).apps.put(appointmentid, newApp);
-		db.updateAppointment(appointmentid, datetime.toString());
+		db.updateAppointment(appointmentid, day, timeslot);
 	}
 	
 	public void cancelAppointment(String patientname, int appointmentid){
