@@ -32,6 +32,7 @@ public class AppointmentMgr {
 		Appointment newApp = (pm.patients.get(patientname)).apps.get(appointmentid);
 		newApp.setDatetime(datetime);
 		(pm.patients.get(patientname)).apps.put(appointmentid, newApp);
+		db.updateAppointment(appointmentid, datetime.toString());
 	}
 	
 	public void cancelAppointment(String patientname, int appointmentid){
