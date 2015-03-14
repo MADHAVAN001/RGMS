@@ -121,21 +121,27 @@ public class DatabaseMgr {
 	
 	public HashMap<Integer, Appointment> loadAppointments(String patientname,
 			HashMap<Integer, Appointment>h){
-		sql = "SELECT APPOINTMENTID, TYPE, DATETIME, "
-				+ "HEALTHPROBLEM, PLACE, DOCTORNAME FROM APPOINTMENT "
-				+ "WHERE PATIENTNAME = \'"+patientname+"\'";
-		rs = stmt.executeQuery(sql);
-		while(rs.next()){
-			int appointmentid = rs.getInt("APPOINTMENTID");
-			int type = rs.getInt("TYPE");
-			GregorianCalendar datetime = rs.getString("DATETIME");
-			String healthproblem = rs.getString("HEALTHPROBLEM");
-			String place = rs.getString("PLACE");
-			String doctorname = rs.getString("DOCTORNAME");
-			h.put(appointmentid, new Appointment(appointmentid, type, datetime,
-					healthproblem, place, doctorname));
-	}
-		return h;
+		try{
+			sql = "SELECT APPOINTMENTID, TYPE, DAY, TIMESLOT, "
+					+ "HEALTHPROBLEM, PLACE, DOCTORNAME FROM APPOINTMENT "
+					+ "WHERE PATIENTNAME = \'"+patientname+"\'";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				int appointmentid = rs.getInt("APPOINTMENTID");
+				int type = rs.getInt("TYPE");
+				int day = rs.getInt("DAY");
+				int timeslot = rs.getInt("TIMESLOT");
+				String healthproblem = rs.getString("HEALTHPROBLEM");
+				String place = rs.getString("PLACE");
+				String doctorname = rs.getString("DOCTORNAME");
+				h.put(appointmentid, new Appointment(appointmentid, type, day, timeslot,
+						healthproblem, place, doctorname));
+		}
+			return h;
+		}catch(SQLException e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public Object getData(int healthanalysisid, int choice){
@@ -190,9 +196,10 @@ public class DatabaseMgr {
 			case 3:
 				Appointment a = (Appointment)o;
 				sql = "INSERT INTO APPOINTMENT(APPOINTMENTID, TYPE, "
-						+ "DATETIME, HEALTHPROBLEM, PLACE, DOCTORNAME)"
+						+ "DAY, TIMESLOT, HEALTHPROBLEM, PLACE, DOCTORNAME)"
 						+ "VALUES(\'" + a.getAppointmentid() + "\',\'" +
-						a.getType() + "\',\'" + a.getDateTime() + "\',\'" +
+						a.getType() + "\',\'" + a.getDay() + "\',\'"
+								+ a.getTimeSlot() + "\',\'" +
 						a.getHealthProblem() + "\',\'" + a.getPlace() + 
 						"\',\'" + a.getDoctorUsername() + "\')";
 				stmt.executeUpdate(sql);
@@ -214,12 +221,15 @@ public class DatabaseMgr {
 		}
 	}
 	
-	public void updateAppointment(int appointmentid, String datetime){
+	public void updateAppointment(int appointmentid, int day, int timeslot){
 		try{
 			sql = "UPDATE APPOINTMENT"
-					+ "SET DATETIME = \'" + datetime + "\'"
+					+ "SET DAY = " + day + ""
 					+ " WHERE APPOINTMENT ID = " + appointmentid;
 			stmt.executeUpdate(sql);
+			sql = "UPDATE APPOINTMENT"
+					+ "SET TIMESLOT = " + timeslot + ""
+					+ " WHERE APPOINTMENT ID = " + appointmentid;
 		}catch(SQLException se){
 			se.printStackTrace();
 		}
@@ -348,6 +358,23 @@ public class DatabaseMgr {
 			}
 		} catch (SQLException se) {
 			se.printStackTrace();
+		}
+	}
+	public boolean checkSlot(String doctorname, int day, int slotno){
+		try{
+			sql = "SELECT FROM SLOTS WHERE DOCTORNAME = \'"
+					+ doctorname + "\'";
+			rs = stmt.executeQuery(sql);
+			String slots = rs.getString("DAY "+Integer.toString(day));
+			for(int i=0; i<slots.length(); i++){
+				char ch = slots.charAt(i);
+				if(Character.getNumericValue(ch) == slotno)
+					return true;
+			}
+			return false;
+		}catch (SQLException se) {
+			se.printStackTrace();
+			return false;
 		}
 	}
 }
