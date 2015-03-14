@@ -5,6 +5,13 @@ public class Medicines {
 	String name;
 	String description;
 	int[] intakecon;
+	public Medicines(String name,String description, int[] quantity, int[] intakecon)
+	{
+		this.setname(name);
+		this.setdescription(description);
+		this.set(intakecon);
+		this.setquantity(quantity);
+	}
 	public void setquantity(int quantity[])
 	{
 		this.quantity = quantity;
