@@ -1,163 +1,159 @@
 package com.software_engineering.rgms;
-
 import java.sql.*;
 import java.util.*;
 
 public class DatabaseMgr {
-	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://rgms.ceu7pkexqrb8."
-			+ "ap-southeast-1.rds.amazonaws.com:3306/innodb";
+	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+	static final String DB_URL = "jdbc:mysql://rgms.ceu7pkexqrb8."+
+	"ap-southeast-1.rds.amazonaws.com:3306/innodb";
 	static final String USER = "rgms";
 	static final String PASS = "rgms2006";
 	private Connection conn = null;
 	private Statement stmt = null;
 	ResultSet rs = null;
 	String sql;
-
-	public DatabaseMgr() {
-		try {
+	
+	public DatabaseMgr(){
+		try{
 			Class.forName(JDBC_DRIVER);
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
 			stmt = conn.createStatement();
-		} catch (SQLException se) {
+		}catch(SQLException se){
 			se.printStackTrace();
-		} catch (Exception e) {
+		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
-
+	
 	/*
-	 * Function to load data from database to hashmap assigned
+	 *  Function to load data from database to hashmap assigned
 	 */
-
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public HashMap getData(int choice, @SuppressWarnings("rawtypes") HashMap h) {
-		try {
-			switch (choice) {
+	public HashMap getData(int choice, @SuppressWarnings("rawtypes") HashMap h){
+		try{
+			switch(choice){
 			case 1:
 				sql = "SELECT USERNAME, NAME, EMAILID, DOB, ADDRESS,"
 						+ " PHONE,REGISTERDATE, NOTIFMETHOD FROM PATIENT";
-				rs = stmt.executeQuery(sql);
-				while (rs.next()) {
-					String username = rs.getString("USERNAME");
+			    rs = stmt.executeQuery(sql);
+			    while(rs.next()){
+			    	String username = rs.getString("USERNAME");
 					String name = rs.getString("NAME");
 					String emailid = rs.getString("EMAILID");
 					GregorianCalendar dob = rs.getString("DOB");
 					String address = rs.getString("ADDRESS");
 					String phoneno = rs.getString("PHONE");
-					GregorianCalendar registerdate = rs
-							.getString("REGISTERDATE");
+					GregorianCalendar registerdate = rs.getString("REGISTERDATE");
 					int notifmethod = rs.getInt("NOTIFMETHOD");
-					h.put(username, new Patient(username, name, emailid, dob,
-							address, phoneno, registerdate, notifmethod));
-				}
-				return h;
-				break;
-			case 2:
-				sql = "SELECT USERNAME, NAME, EMAILID, DOB, ADDRESS,"
-						+ "PHONE,REGISTERDATE, SPECIALIZATION, PRACTICELOCATION, HOLIDAYSLEFT "
-						+ "FROM DOCTOR";
-				rs = stmt.executeQuery(sql);
-				while (rs.next()) {
-					String username = rs.getString("USERNAME");
+					h.put(username, new Patient(username, name, emailid,
+				dob, address, phoneno, registerdate, notifmethod));
+			    }
+			    return h;
+			    break;
+			case 2: 
+				sql = "SELECT USERNAME, NAME, EMAILID, DOB, ADDRESS," + 
+			"PHONE,REGISTERDATE, SPECIALIZATION, PRACTICELOCATION, HOLIDAYSLEFT "
+			+ "FROM DOCTOR";	
+			    rs = stmt.executeQuery(sql);
+			    while(rs.next()){
+			    	String username = rs.getString("USERNAME");
 					String name = rs.getString("NAME");
 					String emailid = rs.getString("EMAILID");
 					GregorianCalendar dob = rs.getString("DOB");
 					String address = rs.getString("ADDRESS");
 					String phoneno = rs.getString("PHONE");
-					GregorianCalendar registerdate = rs
-							.getString("REGISTERDATE");
+					GregorianCalendar registerdate = rs.getString("REGISTERDATE");
 					String specialization = rs.getString("SPECIALIZATION");
 					String practicelocation = rs.getString("PRACTICELOCATION");
 					int holidaysleft = rs.getInt(holidaysleft);
-					h.put(username, new Doctor(username, name, emailid, dob,
-							address, phoneno, registerdate, specialization,
-							practicelocation, holidaysleft));
-				}
-				return h;
-				break;
+					h.put(username, new Doctor(username, name, emailid,
+				dob, address, phoneno, registerdate, specialization,
+				practicelocation, holidaysleft));
+			    }
+			    return h;
+			    break;
 			case 3:
-				sql = "SELECT APPOINTMENTID, USERNAME FROM APPOINTMENT";
+				sql = "SELECT APPOINTMENTID, PATIENTNAME FROM APPOINTMENT";
 				rs = stmt.executeQuery(sql);
-				while (rs.next()) {
+				while(rs.next()){
 					int appointmentid = rs.getInt("APPOINTMENTID");
-					String patientname = rs.getString("USERNAME");
+					String patientname = rs.getString("PATIENTNAME");
 					h.put(appointmentid, patientname);
 				}
 				return h;
 				break;
 			case 4:
-				sql = "SELECT APPOINTMENTID, USERNAME FROM APPOINTMENT";
+				sql = "SELECT APPOINTMENTID, DOCTORNAME FROM APPOINTMENT";
 				rs = stmt.executeQuery(sql);
-				while (rs.next()) {
+				while(rs.next()){
 					int appointmentid = rs.getInt("APPOINTMENTID");
-					String doctorname = rs.getString("USERNAME");
+					String doctorname = rs.getString("DOCTORNAME");
 					h.put(appointmentid, doctorname);
 				}
 				return h;
 				break;
 			}
-		} catch (SQLException se) {
+		}catch(SQLException se){
 			se.printStackTrace();
 		}
 	}
-
+	
 	public HashMap<Integer, Appointment> loadAppointments(String patientname,
-			HashMap<Integer, Appointment> h) {
+			HashMap<Integer, Appointment>h){
 		sql = "SELECT APPOINTMENTID, TYPE, DATETIME, "
-				+ "HEALTHPROBLEM, PLACE, USERNAME FROM APPOINTMENT "
-				+ "WHERE USERNAME = \'" + patientname + "\'";
+				+ "HEALTHPROBLEM, PLACE, DOCTORNAME FROM APPOINTMENT "
+				+ "WHERE PATIENTNAME = \'"+patientname+"\'";
 		rs = stmt.executeQuery(sql);
-		while (rs.next()) {
+		while(rs.next()){
 			int appointmentid = rs.getInt("APPOINTMENTID");
 			int type = rs.getInt("TYPE");
 			GregorianCalendar datetime = rs.getString("DATETIME");
 			String healthproblem = rs.getString("HEALTHPROBLEM");
 			String place = rs.getString("PLACE");
-			String doctorname = rs.getString("USERNAME");
+			String doctorname = rs.getString("DOCTORNAME");
 			h.put(appointmentid, new Appointment(appointmentid, type, datetime,
 					healthproblem, place, doctorname));
-		}
+	}
 		return h;
 	}
-
-	public void insertData(int choice, Object o) {
-		try {
-			switch (choice) {
+	
+	public void insertData(int choice, Object o){
+		try{
+			switch(choice){
 			case 1:
-				Patient p = (Patient) o;
-				sql = "INSERT INTO PATIENT" + "VALUES(\'" + p.getUsername()
-						+ "\',\'" + p.getName() + "\',\'" + p.getEmailId()
-						+ "\',\'" + p.getDOB().toString() + "\',\'"
-						+ p.getAddress() + "\',\'" + p.getPhoneNo() + "\',\'"
-						+ p.getRegDate().toString() + "\',\'"
-						+ p.getNotifMethod() + "\')";
+				Patient p = (Patient)o;
+				sql = "INSERT INTO PATIENT"
+						+ "VALUES(\'"+ p.getUsername()+ "\',\'" + p.getName()
+						+"\',\'" + p.getEmailId() + "\',\'" + p.getDOB().toString()
+						+"\',\'" + p.getAddress() + "\',\'" + p.getPhoneNo()
+						+"\',\'" + p.getRegDate().toString() + "\',\'" + 
+						p.getNotifMethod() + "\')";
 				stmt.executeUpdate(sql);
 				break;
 			case 2:
-				Doctor d = (Doctor) o;
-				sql = "INSERT INTO DOCTOR" + "VALUES(\'" + d.getUsername()
-						+ "\',\'" + d.getName() + "\',\'" + d.getEmailId()
-						+ "\',\'" + d.getDOB().toString() + "\',\'"
-						+ d.getAddress() + "\',\'" + d.getPhoneNo() + "\',\'"
-						+ d.getRegDate().toString() + "\',\'"
-						+ d.getSpecialization() + "\',\'"
-						+ d.getPracticeLocation() + "\',\'"
-						+ d.getHolidaysLeft() + "\')";
+				Doctor d = (Doctor)o;
+				sql = "INSERT INTO DOCTOR"
+						+ "VALUES(\'"+ d.getUsername()+ "\',\'" + d.getName()
+						+"\',\'" + d.getEmailId() + "\',\'" + d.getDOB().toString()
+						+"\',\'" + d.getAddress() + "\',\'" + d.getPhoneNo()
+						+"\',\'" + d.getRegDate().toString() + "\',\'" +
+						d.getSpecialization() + "\',\'" + d.getPracticeLocation()
+						+ "\',\'" + d.getHolidaysLeft() + "\')";
 				stmt.executeUpdate(sql);
 				break;
 			case 3:
-				Appointment a = (Appointment) o;
+				Appointment a = (Appointment)o;
 				sql = "INSERT INTO APPOINTMENT(APPOINTMENTID, TYPE, "
-						+ "DATETIME, HEALTHPROBLEM, PLACE, USERNAME)"
-						+ "VALUES(\'" + a.getAppointmentid() + "\',\'"
-						+ a.getType() + "\',\'" + a.getDateTime() + "\',\'"
-						+ a.getHealthProblem() + "\',\'" + a.getPlace()
-						+ "\',\'" + a.getDoctorUsername() + "\')";
+						+ "DATETIME, HEALTHPROBLEM, PLACE, DOCTORNAME)"
+						+ "VALUES(\'" + a.getAppointmentid() + "\',\'" +
+						a.getType() + "\',\'" + a.getDateTime() + "\',\'" +
+						a.getHealthProblem() + "\',\'" + a.getPlace() + 
+						"\',\'" + a.getDoctorUsername() + "\')";
 				stmt.executeUpdate(sql);
 				break;
 			}
-		} catch (SQLException se) {
+		}catch(SQLException se){
 			se.printStackTrace();
 		}
 	}
