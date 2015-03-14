@@ -300,8 +300,8 @@ public class DatabaseMgr {
 	public void deleteRecord(int choice, int appointmentid) {
 		try {
 			if (choice == 3) {
-				sql = "DELETE FROM APPOINTMENT WHERE APPOINTMENTID = \'"
-						+ appointmentid + "\'";
+				sql = "DELETE FROM APPOINTMENT WHERE APPOINTMENTID = "
+						+ appointmentid ;
 				stmt.executeUpdate(sql);
 			}
 		} catch (SQLException se) {
