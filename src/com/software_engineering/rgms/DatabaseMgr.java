@@ -203,6 +203,13 @@ public class DatabaseMgr {
 						a.getHealthProblem() + "\',\'" + a.getPlace() + 
 						"\',\'" + a.getDoctorUsername() + "\')";
 				stmt.executeUpdate(sql);
+				sql = "UPDATE SLOTS"
+						+ "SET DAY "+a.getDay()+"= " + this.getSlot
+						(a.getDoctorUsername(), a.getDay()).concat
+						(Integer.toString(a.getTimeSlot()))
+								+ "WHERE DOCTORNAME = \'" + a.getDoctorUsername()
+								+ "\'";
+				stmt.executeUpdate(sql);
 				break;
 			}
 		}catch(SQLException se){
@@ -375,6 +382,19 @@ public class DatabaseMgr {
 		}catch (SQLException se) {
 			se.printStackTrace();
 			return false;
+		}
+	}
+	
+	public String getSlot(String doctorname, int day){
+		try{
+			sql = "SELECT FROM SLOTS WHERE DOCTORNAME = \'"
+					+ doctorname + "\'";
+			rs = stmt.executeQuery(sql);
+			String slots = rs.getString("DAY "+Integer.toString(day));
+			return slots;
+		}catch(SQLException e){
+			e.printStackTrace();
+			return "";
 		}
 	}
 }
